@@ -1,0 +1,57 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Maven
+/.mvn
+/mvnw
+/mvnw.cmd
+/target/
+
+# Java
+*.class
+*.log
+*.out
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# NetBeans
+.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Spring Boot
+spring-boot-devtools/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Maven wrapper
+.mvn/
+
+# Java 17 specific (if any)
+*.class
+
+# Local environment files (e.g., local configuration or environment variables)
+application-local.properties
+application-local.yml
+
+# Dependency directories
+/node_modules/
+
+# Log files
+*.log
