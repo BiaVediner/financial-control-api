@@ -2,10 +2,8 @@ package br.com.api.domain.exceptions;
 
 import br.com.api.domain.exceptions.enums.ErrorMessageEnum;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class BadRequestException extends Exception {
     private String code;
 

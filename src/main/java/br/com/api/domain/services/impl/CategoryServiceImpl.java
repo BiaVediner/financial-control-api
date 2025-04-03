@@ -10,6 +10,7 @@ import br.com.api.resources.entities.SubcategoryEntity;
 import br.com.api.resources.repositories.CategoryRepository;
 import br.com.api.resources.repositories.SubcategoryRepository;
 import br.com.api.resources.specifications.CategorySpecification;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import static br.com.api.domain.exceptions.enums.ErrorMessageEnum.CATEGORY_NOT_F
 import static br.com.api.domain.exceptions.enums.ErrorMessageEnum.CATEGORY_REGISTER_CONSTRAIN;
 import static br.com.api.domain.exceptions.enums.ErrorMessageEnum.SUBCATEGORY_DELETE_CONSTRAIN;
 
+@Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -35,10 +37,14 @@ public class CategoryServiceImpl implements CategoryService {
         request.validate();
 
         if(categoryRepository.existsByName(request.getName())) {
+            log.error("Create Category Error - Repeated creation attempt");
             throw new BadRequestException(CATEGORY_REGISTER_CONSTRAIN);
         }
 
-        return categoryRepository.save(request.toEntity()).getId();
+        Long categoryId = categoryRepository.save(request.toEntity()).getId();
+
+        log.debug("Create Category Successful");
+        return categoryId;
     }
 
     @Override
@@ -46,12 +52,14 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<CategoryEntity> optionalCategory = categoryRepository.findById(id);
 
         if(optionalCategory.isEmpty()) {
+            log.error("Update Category Error - attempt with not found category");
             throw new NotFoundException(CATEGORY_NOT_FOUND);
         }
 
         CategoryEntity category = optionalCategory.get();
 
         if(categoryRepository.existsByName(request.getName())) {
+            log.error("Update Category Error - Repeated creation attempt");
             throw new BadRequestException(CATEGORY_REGISTER_CONSTRAIN);
         }
 
@@ -59,6 +67,8 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdatedAt(LocalDateTime.now());
 
         categoryRepository.save(category);
+
+        log.debug("Update Category Successful");
     }
 
     @Override
@@ -66,6 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<CategoryEntity> optionalCategory = categoryRepository.findById(id);
 
         if(optionalCategory.isEmpty()) {
+            log.error("Delete Category Error - attempt with not found category");
             throw new NotFoundException(CATEGORY_NOT_FOUND);
         }
 
@@ -74,6 +85,7 @@ public class CategoryServiceImpl implements CategoryService {
         if(!category.getSubcategories().isEmpty()) {
             for (SubcategoryEntity subcategory : category.getSubcategories()) {
                 if (!subcategory.isDeletable()) {
+                    log.error("Delete Category Error - attempt with subcategory with entries");
                     throw new BadRequestException(SUBCATEGORY_DELETE_CONSTRAIN);
                 }
                 subcategoryRepository.delete(subcategory);
@@ -81,6 +93,8 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         categoryRepository.deleteById(id);
+
+        log.debug("Delete Category Successful");
     }
 
     @Override
@@ -88,6 +102,7 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<CategoryEntity> optionalCategory = categoryRepository.findById(id);
 
         if(optionalCategory.isEmpty()) {
+            log.error("Get Category by Id Error - attempt with not found category");
             throw new NotFoundException(CATEGORY_NOT_FOUND);
         }
 
@@ -95,6 +110,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         List<SubcategoryDTO> subcategories = category.getSubcategories().stream().map(SubcategoryEntity::toDto).toList();
 
+        log.debug("Get Category by Id Successful");
         return category.toDto(subcategories);
     }
 
@@ -102,6 +118,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDTO> getCategories(String name) {
         List<CategoryEntity> categories = categoryRepository.findAll(CategorySpecification.getSpecification(name));
 
+        log.debug("Get Categories Successful");
         return categories.stream().map(CategoryEntity::toDto).toList();
     }
 }

@@ -58,5 +58,11 @@ A aplicação estará disponível no endpoint
 ## Documentação da API
 
 ```http
-  http://localhost:8080/v1/swagger-ui.html
+  http://localhost:8080/v1/swagger-ui/index.html
+```
+
+## Observalidade
+
+```http
+  http://localhost:3000
 ```

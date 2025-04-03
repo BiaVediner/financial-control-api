@@ -3,13 +3,13 @@ package br.com.api.application.handler;
 import br.com.api.application.dto.ErrorDTO;
 import br.com.api.domain.exceptions.BadRequestException;
 import br.com.api.domain.exceptions.NotFoundException;
+import br.com.api.domain.exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.IOException;
+import static br.com.api.domain.exceptions.enums.ErrorMessageEnum.GENERIC_ERROR;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -30,21 +30,20 @@ public class ErrorHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDTO);
     }
 
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<ErrorDTO> handleException(IOException ex) {
+    @ExceptionHandler(UnauthorizedException.class)
+    public ErrorDTO handleException(UnauthorizedException ex) {
         ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setCode("BR02");
+        errorDTO.setCode(ex.getCode());
         errorDTO.setMessage(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDTO);
+        return errorDTO;
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorDTO> handleException(MethodArgumentNotValidException ex) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDTO> handleException(Exception ex) {
         ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setCode("BR01");
-        errorDTO.setMessage(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDTO);
+        errorDTO.setCode(GENERIC_ERROR.getCode());
+        errorDTO.setMessage(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDTO);
     }
-
 
 }

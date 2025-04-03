@@ -49,6 +49,7 @@ Thumbs.db
 # Local environment files (e.g., local configuration or environment variables)
 application-local.properties
 application-local.yml
+.env
 
 # Dependency directories
 /node_modules/

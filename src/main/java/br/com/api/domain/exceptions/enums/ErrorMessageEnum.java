@@ -4,6 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorMessageEnum {
+    UNAUTHORIZED("API001", "You are not authorized to access this endpoint"),
+    GENERIC_ERROR("API002", "You are not authorized to access this endpoint"),
+
     ENTRY_INVALID_VALUE("ENTRY001", "Cannot process entry because value is not valid"),
     ENTRY_INVALID_SUBCATEGORY_ID("ENTRY002", "Cannot process entry because subcategoryId is not valid"),
     ENTRY_NOT_FOUND("ENTRY003", "Entry not found"),

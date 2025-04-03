@@ -44,7 +44,7 @@ public class EntryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEntry(@PathVariable Long id) throws NotFoundException {
+    public ResponseEntity<Void> deleteEntry(@PathVariable Long id) throws NotFoundException {
         entryService.deleteEntry(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -55,7 +55,7 @@ public class EntryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EntryDTO>> getSubcategories(
+    public ResponseEntity<List<EntryDTO>> getEntries(
             @RequestParam(name = "startDate", required = false) @JsonFormat(pattern="dd/MM/yyyy") LocalDate startDate,
             @RequestParam(name = "endDate", required = false) @JsonFormat(pattern="dd/MM/yyyy") LocalDate endDate,
             @RequestParam(name = "subcategoryId", required = false) Long subcategoryId

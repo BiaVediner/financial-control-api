@@ -42,7 +42,7 @@ public class SubcategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSubcategory(@PathVariable Long id) throws BadRequestException, NotFoundException {
+    public ResponseEntity<Void> deleteSubcategory(@PathVariable Long id) throws BadRequestException, NotFoundException {
         subcategoryService.deleteSubcategory(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
